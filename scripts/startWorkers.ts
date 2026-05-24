@@ -1,3 +1,5 @@
+require('module-alias/register')
+
 /**
  * Development worker starter — imports and registers workers.
  * Run with: node scripts/startWorkers.js (compiled) or ts-node in dev

@@ -12,6 +12,9 @@
     "test": "npm run lint && echo 'No unit tests configured yet'",
     "create-admin": "ts-node scripts/createAdmin.ts"
   },
+  "_moduleAliases": {
+    "@": "src"
+  },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
@@ -21,6 +24,7 @@
     "date-fns": "^4.2.1",
     "ioredis": "^5.3.1",
     "lucide-react": "^1.16.0",
+    "module-alias": "^2.3.4",
     "next": "16.2.6",
     "pg": "^8.21.0",
     "prom-client": "^14.0.0",
