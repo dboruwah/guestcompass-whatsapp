@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist-workers",
     "module": "commonjs",
+    "moduleResolution": "node16",
     "target": "es2020",
     "esModuleInterop": true
   },
