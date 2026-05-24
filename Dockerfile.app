@@ -14,6 +14,7 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
+RUN npx tsc -p tsconfig.workers.json
 
 FROM node:20-alpine AS runner
 WORKDIR /app
@@ -30,15 +31,19 @@ COPY --from=builder /app/public ./public
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/dist-workers ./dist-workers
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 USER nextjs
 
 EXPOSE 3000
+EXPOSE 9090
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:3000/health/liveness || exit 1
-
-CMD ["node", "server.js"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
