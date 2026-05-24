@@ -1,0 +1,15 @@
+[Unit]
+Description=GuestCompass Worker
+After=network.target
+
+[Service]
+Type=simple
+User=node
+WorkingDirectory=/var/www/guestcompass
+ExecStart=/usr/bin/node /var/www/guestcompass/dist-workers/scripts/startWorkers.js
+Restart=always
+Environment=NODE_ENV=production
+Environment=REDIS_URL=redis://127.0.0.1:6379
+
+[Install]
+WantedBy=multi-user.target

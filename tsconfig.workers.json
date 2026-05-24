@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist-workers",
+    "module": "commonjs",
+    "target": "es2020",
+    "esModuleInterop": true
+  },
+  "include": ["scripts/**/*.ts", "src/workers/**/*.ts", "src/services/**/*.ts", "src/queue/**/*.ts", "src/events/**/*.ts"]
+}
