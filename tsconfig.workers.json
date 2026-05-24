@@ -5,7 +5,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2020",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noEmit": false
   },
   "include": ["scripts/**/*.ts", "src/workers/**/*.ts", "src/services/**/*.ts", "src/queue/**/*.ts", "src/events/**/*.ts"]
 }
