@@ -1,7 +1,7 @@
 {
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
+    "dockerfilePath": "Dockerfile.app"
   },
   "deploy": {
     "healthcheckPath": "/api/health/liveness",
