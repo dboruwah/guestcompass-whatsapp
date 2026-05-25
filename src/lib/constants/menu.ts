@@ -7,6 +7,7 @@ import {
   BarChart3,
   Settings,
   ShieldAlert,
+  Bot,
   type LucideIcon,
 } from "lucide-react"
 
@@ -23,6 +24,7 @@ export const MAIN_NAV_ITEMS: MainNavItem[] = [
   { label: "Broadcasts", href: "/broadcasts", icon: Send },
   { label: "Segments", href: "/segments", icon: UserCheck },
   { label: "Inbox", href: "/inbox", icon: MessageSquare },
+  { label: "Chatbots", href: "/chatbots", icon: Bot },
   { label: "Analytics", href: "/analytics", icon: BarChart3 },
   { label: "Settings", href: "/settings", icon: Settings },
   { label: "Audit Logs", href: "/audit-logs", icon: ShieldAlert },

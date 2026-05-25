@@ -25,6 +25,37 @@ export type AuditAction =
   | "send_message"
   | "bulk_operation"
 
+export type ChatbotStatus = "draft" | "active" | "paused"
+
+export type ChatbotTriggerType = "keyword" | "exact_match" | "regex" | "welcome" | "fallback"
+
+export type ChatbotResponseType = "text" | "template" | "interactive"
+
+export interface Chatbot {
+  id: string
+  business_id: string
+  name: string
+  status: ChatbotStatus
+  welcome_message: string | null
+  fallback_message: string | null
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface ChatbotRule {
+  id: string
+  chatbot_id: string
+  trigger_type: ChatbotTriggerType
+  trigger_value: string | null
+  response_type: ChatbotResponseType
+  response_config: Record<string, unknown>
+  position: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
 export type AuditEntity =
   | "contact"
   | "campaign"

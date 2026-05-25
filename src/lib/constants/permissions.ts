@@ -27,6 +27,8 @@ export type Permission =
   | "settings:write"
   | "audit:read"
   | "audit:export"
+  | "chatbots:read"
+  | "chatbots:write"
 
 export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   super_admin: [
@@ -39,6 +41,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "analytics:read", "analytics:export",
     "settings:read", "settings:write",
     "audit:read", "audit:export",
+    "chatbots:read", "chatbots:write",
   ],
   admin: [
     "guests:read", "guests:write", "guests:export",
@@ -50,6 +53,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "analytics:read", "analytics:export",
     "settings:read", "settings:write",
     "audit:read",
+    "chatbots:read", "chatbots:write",
   ],
   manager: [
     "guests:read", "guests:write",
@@ -60,6 +64,8 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "staff:read",
     "analytics:read",
     "settings:read",
+    "audit:read",
+    "chatbots:read", "chatbots:write",
   ],
   agent: [
     "guests:read",
@@ -67,6 +73,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "messages:read", "messages:write",
     "conversations:read", "conversations:write",
     "analytics:read",
+    "chatbots:read",
   ],
   viewer: [
     "guests:read",
@@ -74,6 +81,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "messages:read",
     "conversations:read",
     "analytics:read",
+    "chatbots:read",
   ],
 }
 

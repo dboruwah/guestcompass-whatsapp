@@ -59,6 +59,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           text: msg.text?.body,
           raw: msg,
         })
+
+        // Process chatbot auto-reply rules
+        try {
+          const { processChatbotMessage } = await import('@/services/chatbot/engine')
+          await processChatbotMessage({ from: msg.from, text: msg.text?.body, type: msg.type })
+        } catch (e) {
+          console.error('chatbot engine error', e)
+        }
       }
 
       res.status(200).json({ ok: true })
