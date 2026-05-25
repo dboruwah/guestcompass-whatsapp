@@ -64,18 +64,10 @@ CREATE POLICY "Users can delete rules for their chatbots"
   ON chatbot_rules FOR DELETE
   USING (chatbot_id IN (SELECT id FROM chatbots WHERE business_id IN (SELECT business_id FROM profiles WHERE id = auth.uid())));
 
-CREATE OR REPLACE FUNCTION trg_chatbots_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE TRIGGER trg_chatbots_updated_at
   BEFORE UPDATE ON chatbots
-  FOR EACH ROW EXECUTE FUNCTION trg_chatbots_updated_at();
+  FOR EACH ROW EXECUTE FUNCTION handle_updated_at();
 
 CREATE TRIGGER trg_chatbot_rules_updated_at
   BEFORE UPDATE ON chatbot_rules
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+  FOR EACH ROW EXECUTE FUNCTION handle_updated_at();

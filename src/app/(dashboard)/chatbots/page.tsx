@@ -27,7 +27,7 @@ export default function ChatbotsPage() {
   useEffect(() => {
     fetch("/api/chatbots")
       .then((r) => r.json())
-      .then(setChatbots)
+      .then((data) => { if (Array.isArray(data)) setChatbots(data) })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
