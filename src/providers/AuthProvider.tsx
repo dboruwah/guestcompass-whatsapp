@@ -41,15 +41,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false)
         return
       }
-      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-      setProfile(data as unknown as Profile)
+      try {
+        const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle()
+        setProfile(data as unknown as Profile)
+      } catch {
+        // Profile may not exist or RLS blocks access — user is still authenticated
+      }
       setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session?.user) {
-        const { data } = await supabase.from("profiles").select("*").eq("id", session.user.id).single()
-        setProfile(data as unknown as Profile)
+        try {
+          const { data } = await supabase.from("profiles").select("*").eq("id", session.user.id).maybeSingle()
+          setProfile(data as unknown as Profile)
+        } catch {
+          // Profile fetch failed — user is still authenticated
+        }
       } else if (event === "SIGNED_OUT") {
         setProfile(null)
       }
