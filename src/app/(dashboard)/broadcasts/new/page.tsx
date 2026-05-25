@@ -2,7 +2,6 @@
 
 import { PageHeader } from "@/components/layout/PageHeader"
 import { CampaignWizard } from "@/components/campaigns/CampaignWizard"
-import { CampaignProcessor } from '@/services/messaging/campaignProcessor'
 import { Button } from "@/components/ui/Button"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"

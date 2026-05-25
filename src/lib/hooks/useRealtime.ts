@@ -56,6 +56,7 @@ export function useRealtimeMessages(conversationId: string | undefined) {
     if (!conversationId) { setLoading(false); return }
 
     const supabase = createClient()
+    if (!supabase) { setLoading(false); return }
 
     fetch(`/api/conversations/${conversationId}`)
       .then(r => r.json())

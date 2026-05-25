@@ -168,8 +168,6 @@ export default function ChatbotBuilderPage({ params }: { params: Promise<{ id: s
 
   if (!chatbot) return null
 
-  const TriggerIcon = TRIGGER_ICONS
-
   return (
     <div className="space-y-6 animate-in">
       <PageHeader
