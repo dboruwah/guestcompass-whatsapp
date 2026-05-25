@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "guestcompass-app"
+    scrape_interval: 15s
+    metrics_path: /api/metrics
+    static_configs:
+      - targets:
+          - "host.docker.internal:3000"
+        labels:
+          service: "app"
+
+  - job_name: "guestcompass-worker"
+    scrape_interval: 15s
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "host.docker.internal:9090"
+        labels:
+          service: "worker"

@@ -1,0 +1,32 @@
+{
+  "title": "GuestCompass WhatsApp Platform",
+  "uid": "guestcompass",
+  "panels": [
+    {
+      "title": "Jobs Processed",
+      "type": "graph",
+      "targets": [{ "expr": "rate(gc_jobs_processed_total[5m])", "legendFormat": "rate" }],
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }
+    },
+    {
+      "title": "Jobs Failed",
+      "type": "graph",
+      "targets": [{ "expr": "rate(gc_jobs_failed_total[5m])", "legendFormat": "rate" }],
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 }
+    },
+    {
+      "title": "Queue Length",
+      "type": "graph",
+      "targets": [{ "expr": "gc_queue_length", "legendFormat": "pending" }],
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
+    },
+    {
+      "title": "DLQ Length",
+      "type": "graph",
+      "targets": [{ "expr": "gc_dlq_length", "legendFormat": "dlq" }],
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
+    }
+  ],
+  "time": { "from": "now-1h", "to": "now" },
+  "tags": ["guestcompass", "whatsapp"]
+}
