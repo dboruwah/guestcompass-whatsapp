@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 
-async function getBusinessId(supabase: any, userId: string): Promise<string | null> {
-  const { data: profile } = await (supabase as any).from("profiles").select("business_id").eq("id", userId).single()
+const ADMIN: any = createAdminClient()
+
+async function getBusinessId(userId: string): Promise<string | null> {
+  const { data: profile } = await ADMIN.from("profiles").select("business_id").eq("id", userId).single()
   if (profile?.business_id) return profile.business_id
 
-  const { data: staff } = await (supabase as any).from("staff").select("business_id").eq("user_id", userId).maybeSingle()
+  const { data: staff } = await ADMIN.from("staff").select("business_id").eq("user_id", userId).maybeSingle()
   return staff?.business_id || null
 }
 
@@ -14,7 +17,7 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const businessId = await getBusinessId(supabase, user.id)
+  const businessId = await getBusinessId(user.id)
   if (!businessId) return NextResponse.json({ error: "No business found" }, { status: 404 })
 
   const { data, error } = await (supabase as any)
@@ -32,7 +35,7 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const businessId = await getBusinessId(supabase, user.id)
+  const businessId = await getBusinessId(user.id)
   if (!businessId) return NextResponse.json({ error: "No business found" }, { status: 404 })
 
   const body = await request.json()

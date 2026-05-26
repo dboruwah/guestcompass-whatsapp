@@ -23,18 +23,22 @@ export default function ChatbotsPage() {
   const [showCreate, setShowCreate] = useState(false)
   const [name, setName] = useState("")
   const [creating, setCreating] = useState(false)
+  const [error, setError] = useState("")
 
-  useEffect(() => {
+  const loadChatbots = () => {
     fetch("/api/chatbots")
       .then((r) => r.json())
       .then((data) => { if (Array.isArray(data)) setChatbots(data) })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [])
+  }
+
+  useEffect(() => { loadChatbots() }, [])
 
   const handleCreate = async () => {
     if (!name.trim()) return
     setCreating(true)
+    setError("")
     try {
       const res = await fetch("/api/chatbots", {
         method: "POST",
@@ -42,10 +46,11 @@ export default function ChatbotsPage() {
         body: JSON.stringify({ name: name.trim() }),
       })
       const bot = await res.json()
+      if (!res.ok) { setError(bot.error || "Failed to create chatbot"); return }
       setShowCreate(false)
       setName("")
       router.push(`/chatbots/${bot.id}`)
-    } catch {}
+    } catch { setError("Network error"); }
     setCreating(false)
   }
 
@@ -133,7 +138,7 @@ export default function ChatbotsPage() {
         </div>
       )}
 
-      <Modal open={showCreate} onClose={() => setShowCreate(false)} title="Create Chatbot" size="sm">
+      <Modal open={showCreate} onClose={() => { setShowCreate(false); setError("") }} title="Create Chatbot" size="sm">
         <div className="space-y-4">
           <Input
             placeholder="e.g., Guest Support Bot"
@@ -141,8 +146,9 @@ export default function ChatbotsPage() {
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleCreate()}
           />
+          {error && <p className="text-sm text-red-400">{error}</p>}
           <div className="flex gap-3 justify-end">
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => { setShowCreate(false); setError("") }}>Cancel</Button>
             <Button onClick={handleCreate} loading={creating}>Create</Button>
           </div>
         </div>
