@@ -83,35 +83,6 @@ async function main() {
     console.log(`User created: ${userId}`)
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, role')
-    .eq('id', userId)
-    .single()
-
-  if (!profile) {
-    const { error: insertErr } = await supabase.from('profiles').insert({
-      id: userId,
-      email,
-      full_name: fullName,
-      role: 'super_admin',
-    })
-    if (insertErr) {
-      console.error('Failed to create profile:', insertErr.message)
-      process.exit(1)
-    }
-  } else {
-    const { error: updateErr } = await supabase
-      .from('profiles')
-      .update({ role: 'super_admin', full_name: fullName })
-      .eq('id', userId)
-    if (updateErr) {
-      console.error('Failed to update profile role:', updateErr.message)
-      process.exit(1)
-    }
-    console.log(`Profile updated: ${profile.role} -> super_admin`)
-  }
-
   const { data: businesses } = await supabase.from('businesses').select('id, name').limit(1)
   let businessId: string
 
@@ -131,6 +102,36 @@ async function main() {
     }
     businessId = biz!.id
     console.log(`Business created: ${businessName}`)
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, role')
+    .eq('id', userId)
+    .single()
+
+  if (!profile) {
+    const { error: insertErr } = await supabase.from('profiles').insert({
+      id: userId,
+      email,
+      full_name: fullName,
+      role: 'super_admin',
+      business_id: businessId,
+    })
+    if (insertErr) {
+      console.error('Failed to create profile:', insertErr.message)
+      process.exit(1)
+    }
+  } else {
+    const { error: updateErr } = await supabase
+      .from('profiles')
+      .update({ role: 'super_admin', full_name: fullName, business_id: businessId })
+      .eq('id', userId)
+    if (updateErr) {
+      console.error('Failed to update profile role:', updateErr.message)
+      process.exit(1)
+    }
+    console.log(`Profile updated: ${profile.role} -> super_admin`)
   }
 
   const { data: staff } = await supabase
