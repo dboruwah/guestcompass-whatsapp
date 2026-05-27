@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import { createClient, isDemoMode, getDemoProfile, clearDemoUser } from "@/lib/supabase/client"
+import { createClient } from "@/lib/supabase/client"
 import type { Profile } from "@/lib/types"
 
 interface AuthContextValue {
@@ -23,17 +23,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const demo = isDemoMode()
-
-    if (demo) {
-      const stored = localStorage.getItem("gc_demo_user")
-      if (stored) {
-        setProfile(getDemoProfile() as Profile)
-      }
-      setLoading(false)
-      return
-    }
-
     const supabase = createClient()
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
@@ -44,9 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle()
         setProfile(data as unknown as Profile)
-      } catch {
-        // Profile may not exist or RLS blocks access — user is still authenticated
-      }
+      } catch {}
       setLoading(false)
     })
 
@@ -55,9 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
           const { data } = await supabase.from("profiles").select("*").eq("id", session.user.id).maybeSingle()
           setProfile(data as unknown as Profile)
-        } catch {
-          // Profile fetch failed — user is still authenticated
-        }
+        } catch {}
       } else if (event === "SIGNED_OUT") {
         setProfile(null)
       }
@@ -67,12 +52,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = async () => {
-    const demo = isDemoMode()
-    if (demo) {
-      clearDemoUser()
-      setProfile(null)
-      return
-    }
     const supabase = createClient()
     await supabase.auth.signOut()
     setProfile(null)

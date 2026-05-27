@@ -2,15 +2,8 @@ import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import type { Database } from "@/lib/types/supabase"
 
-const DEMO_MODE = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://your-project-id.supabase.co"
-
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
-
-  // Skip Supabase middleware in demo mode
-  if (DEMO_MODE) {
-    return supabaseResponse
-  }
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
