@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
+
+let ADMIN: any = null
+try { ADMIN = createAdminClient() } catch {}
 
 async function getBusinessId(supabase: any, userId: string): Promise<string | null> {
   const { data: profile } = await (supabase as any).from("profiles").select("business_id").eq("id", userId).maybeSingle()
   if (profile?.business_id) return profile.business_id
 
-  const { data: staff } = await (supabase as any).from("staff").select("business_id").eq("user_id", userId).maybeSingle()
-  return staff?.business_id || null
+  if (ADMIN) {
+    const { data: staff } = await ADMIN.from("staff").select("business_id").eq("user_id", userId).maybeSingle()
+    if (staff?.business_id) return staff.business_id
+  }
+
+  return null
 }
 
 export async function GET() {
