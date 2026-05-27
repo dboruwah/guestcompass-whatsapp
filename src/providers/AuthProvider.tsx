@@ -23,7 +23,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const supabase = createClient()
+    let supabase: ReturnType<typeof createClient>
+    try {
+      supabase = createClient()
+    } catch {
+      setLoading(false)
+      return
+    }
 
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) {
@@ -52,8 +58,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+    } catch {}
     setProfile(null)
   }
 
